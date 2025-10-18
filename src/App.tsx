@@ -1,3 +1,4 @@
+
 /**
  * @license
  * SPDX-License-Identifier: Apache-2.0
@@ -8,7 +9,7 @@ import { AuthPage } from './pages/AuthPage';
 import { AdminDashboard } from './pages/admin/AdminDashboard';
 import { CustomerDashboard } from './pages/customer/CustomerDashboard';
 import { DriverDashboard } from './pages/driver/DriverDashboard';
-import { User, Order, Customer } from './data/types';
+import { User, Order, Customer, Driver } from './data/types';
 import { mockOrders, mockDrivers, generateCustomers } from './data/mockData';
 
 export const App = () => {
@@ -21,6 +22,35 @@ export const App = () => {
     useEffect(() => {
         // Re-generate customers if orders change
         setCustomers(generateCustomers(orders));
+
+        // Recalculate driver ratings and delivery counts
+        const driversToUpdate = drivers.map(driver => {
+            const driverOrders = orders.filter(o => o.driverName === driver.name);
+            const deliveredOrders = driverOrders.filter(o => o.status === 'Delivered');
+            const ratedOrders = deliveredOrders.filter(o => o.rating != null);
+
+            const newCompletedCount = deliveredOrders.length;
+            let newRating = driver.rating;
+            if (ratedOrders.length > 0) {
+                const totalRating = ratedOrders.reduce((sum, o) => sum + o.rating!, 0);
+                newRating = totalRating / ratedOrders.length;
+            }
+
+            // Only create a new object if something changed to avoid unnecessary re-renders
+            if (driver.rating !== newRating || driver.deliveriesCompleted !== newCompletedCount) {
+                return {
+                    ...driver,
+                    rating: newRating,
+                    deliveriesCompleted: newCompletedCount
+                };
+            }
+            return driver;
+        });
+        
+        if (JSON.stringify(drivers) !== JSON.stringify(driversToUpdate)) {
+             setDrivers(driversToUpdate);
+        }
+
     }, [orders]);
 
     const handleLogin = (user: User) => {
@@ -42,6 +72,10 @@ export const App = () => {
     const handleUpdateCustomers = (updatedCustomers: Customer[]) => {
         setCustomers(updatedCustomers);
     }
+    
+    const handleUpdateDrivers = (updatedDrivers: Driver[]) => {
+        setDrivers(updatedDrivers);
+    };
 
     if (!currentUser) {
         return <AuthPage onLogin={handleLogin} />;
@@ -70,9 +104,11 @@ export const App = () => {
         case 'Driver':
             return <DriverDashboard 
                 user={currentUser} 
-                allOrders={orders} 
+                allOrders={orders}
+                drivers={drivers}
                 onLogout={handleLogout}
                 onUpdateOrders={handleUpdateOrders}
+                onUpdateDrivers={handleUpdateDrivers}
             />;
         default:
             return <AuthPage onLogin={handleLogin} />;

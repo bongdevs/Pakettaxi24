@@ -71,9 +71,10 @@ const DeliveryTrackingPanel = ({ order, onCancelOrder }: { order: Order | null; 
                     ) : order.status === 'Pending' ? (
                         <>
                             <OrderRouteMap order={order} />
-                            <div className="pending-delivery" style={{ minHeight: 'auto', padding: '1rem 0', color: 'var(--text-secondary)' }}>
-                                <h4 style={{fontSize: '1.1rem', margin: 0}}>Your order is pending.</h4>
-                                <p>A driver will be assigned shortly.</p>
+                            <div className="pending-delivery" style={{ minHeight: 'auto', padding: '2rem 0' }}>
+                                <span className="material-symbols-outlined">schedule</span>
+                                <h4>Awaiting Driver Assignment</h4>
+                                <p>We are currently looking for a driver for your order.</p>
                             </div>
                         </>
                     ) : (

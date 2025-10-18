@@ -1,33 +1,37 @@
+
 /**
  * @license
  * SPDX-License-Identifier: Apache-2.0
  */
 import React from 'react';
-import { Order, Driver, Customer } from '../../../data/types';
+import { Order } from '../../../data/types';
 import { StatusPill } from '../../../components/common/StatusPill';
-import { LiveTrackingMap } from '../../../components/common/LiveTrackingMap';
 import { OrderRouteMap } from '../../../components/common/OrderRouteMap';
+import { RatingInput } from '../../../components/common/RatingInput';
 
 interface OrderDetailsViewProps {
     orderId: string;
     orders: Order[];
-    drivers: Driver[];
-    customers: Customer[];
     onBack: () => void;
+    onUpdateOrders: (orders: Order[]) => void;
 }
 
-export const OrderDetailsView = ({ orderId, orders, drivers, customers, onBack }: OrderDetailsViewProps) => {
+export const OrderDetailsView = ({ orderId, orders, onBack, onUpdateOrders }: OrderDetailsViewProps) => {
     const order = orders.find(o => o.id === orderId);
     if (!order) return <p>Order not found.</p>;
 
-    const driver = order.driverName ? drivers.find(d => d.name === order.driverName) : null;
-    const customer = customers.find(c => c.name === order.customerName);
+    const handleRateOrder = (orderId: string, rating: number) => {
+        const updatedOrders = orders.map(o =>
+            o.id === orderId ? { ...o, rating } : o
+        );
+        onUpdateOrders(updatedOrders);
+    };
 
     return (
         <div className="order-details-view">
             <button onClick={onBack} className="back-button">
                 <span className="material-symbols-outlined">arrow_back</span>
-                Back to Orders
+                Back to Order History
             </button>
             <div className="details-grid">
                 <div className="card">
@@ -38,13 +42,21 @@ export const OrderDetailsView = ({ orderId, orders, drivers, customers, onBack }
                     <p><strong>Charge:</strong> ${order.deliveryCharge.toFixed(2)}</p>
                 </div>
                  <div className="card">
-                    <h3>Customer & Driver</h3>
-                    <p><strong>Customer:</strong> {customer?.name || 'N/A'}</p>
-                    <p><strong>Contact:</strong> {customer?.email || 'N/A'}</p>
-                    <p><strong>Rating:</strong> {order.rating ? `${order.rating.toFixed(1)} ★` : 'N/A'}</p>
+                    <h3>Driver & Rating</h3>
+                    <p><strong>Driver:</strong> {order.driverName || 'N/A'}</p>
                     <hr />
-                    <p><strong>Driver:</strong> {driver?.name || 'N/A'}</p>
-                    <p><strong>Vehicle:</strong> {driver?.vehicle || 'N/A'}</p>
+                    {order.status === 'Delivered' ? (
+                        order.rating ? (
+                            <p><strong>Your Rating:</strong> <span className="rating-display">{order.rating.toFixed(1)} ★</span></p>
+                        ) : (
+                            <>
+                                <p><strong>Rate your driver:</strong></p>
+                                <RatingInput onRate={(rating) => handleRateOrder(order.id, rating)} />
+                            </>
+                        )
+                    ) : (
+                        <p>You can rate the delivery once it's completed.</p>
+                    )}
                 </div>
                 <div className="card card-full-width">
                      <h3>Locations</h3>
@@ -52,17 +64,10 @@ export const OrderDetailsView = ({ orderId, orders, drivers, customers, onBack }
                      <p><strong>Dropoffs:</strong></p>
                      <ul>{Array.isArray(order.dropoffPoints) && order.dropoffPoints.map(p => <li key={p.id}>{p.address}</li>)}</ul>
                 </div>
-                {order.status === 'In Transit' && order.driverName ? (
-                    <div className="card card-full-width">
-                        <h3>Live Driver Location</h3>
-                        <LiveTrackingMap driverName={order.driverName} drivers={drivers} />
-                    </div>
-                ) : (
-                    <div className="card card-full-width">
-                        <h3>Delivery Route</h3>
-                        <OrderRouteMap order={order} />
-                    </div>
-                )}
+                <div className="card card-full-width">
+                    <h3>Delivery Route</h3>
+                    <OrderRouteMap order={order} />
+                </div>
             </div>
         </div>
     );

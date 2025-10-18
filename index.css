@@ -380,6 +380,56 @@ body {
   color: var(--text-primary);
 }
 
+/* Admin Dashboard Map */
+.admin-dashboard-grid {
+    margin-top: 1.5rem;
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 1.5rem;
+}
+
+.recent-orders-list ul {
+    list-style: none;
+    max-height: 440px;
+    overflow-y: auto;
+    padding-right: 0.5rem;
+}
+
+.recent-orders-list li {
+    padding: 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    margin-bottom: 0.75rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.recent-orders-list li:hover {
+    border-color: var(--primary-color);
+    background-color: #f0f9ff;
+}
+
+.recent-orders-list li.active {
+    border-color: var(--primary-color);
+    background-color: var(--primary-color);
+    color: white;
+    box-shadow: var(--shadow-md);
+}
+
+.recent-orders-list li.active .status-pill {
+    background-color: white;
+    color: var(--primary-color);
+}
+
+.recent-orders-list li.active strong,
+.recent-orders-list li.active span {
+    color: white;
+}
+
+
 /* Analytics View */
 .analytics-view {
   display: grid;
@@ -700,6 +750,11 @@ body {
     border: 1px solid var(--border-color);
     border-radius: var(--border-radius);
     font-size: 1rem;
+}
+
+.form-group input[readonly] {
+    background-color: var(--background-light);
+    cursor: not-allowed;
 }
 
 .dropoff-point-input {
@@ -1035,38 +1090,57 @@ body {
     font-weight: 700;
 }
 
-/* Driver Dashboard */
-.driver-kpis {
+/* Driver Dashboard Revamp */
+.driver-dashboard-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    grid-template-columns: 1fr 2fr;
     gap: 1.5rem;
+    align-items: flex-start;
 }
-
-.active-deliveries-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-    gap: 1.5rem;
-}
-.active-delivery-card {
-    border: 1px solid var(--border-color);
-    border-radius: var(--border-radius);
+.driver-orders-column {
     display: flex;
     flex-direction: column;
+    gap: 1.5rem;
 }
-
-.delivery-card-header {
-    padding: 1rem 1.5rem;
-    border-bottom: 1px solid var(--border-color);
+.driver-orders-column .card,
+.driver-dashboard-grid .card {
+    height: 100%;
+}
+.driver-orders-list ul {
+    list-style: none;
+    max-height: 280px;
+    overflow-y: auto;
+    padding-right: 0.5rem;
+}
+.driver-orders-list li {
+    padding: 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    margin-bottom: 0.75rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
-.delivery-card-header h4 {
-    font-weight: 600;
+.driver-orders-list li.clickable {
+    cursor: pointer;
+    transition: all 0.2s ease;
 }
-.delivery-card-body {
-    padding: 1.5rem;
-    flex-grow: 1;
+.driver-orders-list li.clickable:hover {
+    border-color: var(--primary-color);
+    background-color: #f0f9ff;
+}
+.driver-orders-list li.active {
+    border-color: var(--primary-color);
+    background-color: var(--primary-color);
+    color: white;
+}
+.driver-orders-list li.active strong,
+.driver-orders-list li.active span {
+    color: white;
+}
+.driver-orders-list li.active .status-pill {
+    background-color: white;
+    color: var(--primary-color);
 }
 .address-line {
     display: flex;
@@ -1089,12 +1163,16 @@ body {
 .address-icon.pickup { color: var(--info-color); }
 .address-icon.dropoff { color: var(--danger-color); }
 
-.delivery-card-footer {
-    padding: 1rem 1.5rem;
-    background-color: var(--background-light);
-    border-top: 1px solid var(--border-color);
-    display: flex;
-    justify-content: flex-end;
+.driver-kpis {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+/* Driver Performance */
+.performance-view .card {
+    margin-top: 1.5rem;
 }
 
 /* Driver Earnings & Settings */
@@ -1103,9 +1181,6 @@ body {
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 1.5rem;
     margin-bottom: 1.5rem;
-}
-.payout-summary .card {
-    margin-bottom: 0;
 }
 .payout-summary .card p {
     font-size: 2rem;
@@ -1121,19 +1196,16 @@ body {
     color: var(--text-secondary);
 }
 
-.settings-form {
-    margin-top: 1.5rem;
-}
-
-.settings-form .form-group {
-    max-width: 500px;
+.settings-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 1.5rem;
 }
 
 .settings-form .form-actions {
     margin-top: 1.5rem;
     padding-top: 1.5rem;
     border-top: 1px solid var(--border-color);
-    max-width: 500px;
 }
 
 /* Create Order Modal Stepper and Success Message */
@@ -1232,9 +1304,26 @@ body {
     gap: 0.5rem;
 }
 
+/* Rating Input */
+.rating-input .material-symbols-outlined {
+    cursor: pointer;
+    color: var(--status-pending);
+    font-size: 1.75rem;
+    transition: transform 0.1s ease-in-out;
+}
+.rating-input .material-symbols-outlined:hover {
+    transform: scale(1.2);
+}
+
+.rating-display {
+    font-weight: 600;
+    color: var(--status-pending);
+    font-size: 1.1rem;
+}
+
 
 @media (max-width: 1024px) {
-    .analytics-view {
+    .analytics-view, .driver-dashboard-grid {
         grid-template-columns: 1fr;
     }
     .details-grid {
@@ -1247,6 +1336,9 @@ body {
             "tracking";
     }
     .profile-grid {
+        grid-template-columns: 1fr;
+    }
+    .admin-dashboard-grid {
         grid-template-columns: 1fr;
     }
 }

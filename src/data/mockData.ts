@@ -1,3 +1,5 @@
+
+
 /**
  * @license
  * SPDX-License-Identifier: Apache-2.0
@@ -14,14 +16,14 @@ const d = today.getDate().toString().padStart(2, '0');
 export const todayStr = `${y}-${m}-${d}`;
 
 export const mockOrders: Order[] = [
-  { id: 'ORD001', customerName: 'Alice Johnson', driverName: 'John Smith', pickupAddress: '123 Oak St', dropoffPoints: [{ id: 'dp1-1', address: '456 Pine St' }], status: 'Delivered', date: '2023-10-26', deliveryCharge: 15.00 },
+  { id: 'ORD001', customerName: 'Alice Johnson', driverName: 'John Smith', pickupAddress: '123 Oak St', dropoffPoints: [{ id: 'dp1-1', address: '456 Pine St' }], status: 'Delivered', date: '2023-10-26', deliveryCharge: 15.00, rating: 5 },
   { id: 'ORD002', customerName: 'Bob Williams', driverName: 'Jane Doe', pickupAddress: '789 Maple Ave', dropoffPoints: [{ id: 'dp2-1', address: '101 Birch Rd' }, { id: 'dp2-2', address: '202 Spruce Ave' }], status: 'In Transit', date: '2023-10-26', deliveryCharge: 20.00 },
-  { id: 'ORD003', customerName: 'Charlie Brown', driverName: 'John Smith', pickupAddress: '212 Elm St', dropoffPoints: [{ id: 'dp3-1', address: '313 Cedar Ln' }], status: 'Pending', date: todayStr, deliveryCharge: 15.00 },
-  { id: 'ORD004', customerName: 'Diana Prince', driverName: 'John Smith', pickupAddress: '414 Spruce Dr', dropoffPoints: [{ id: 'dp4-1', address: '515 Redwood Ct' }], status: 'Cancelled', date: '2023-10-25', deliveryCharge: 15.00 },
+  { id: 'ORD003', customerName: 'Charlie Brown', driverName: null, pickupAddress: '212 Elm St', dropoffPoints: [{ id: 'dp3-1', address: '313 Cedar Ln' }], status: 'Pending', date: todayStr, deliveryCharge: 15.00 },
+  { id: 'ORD004', customerName: 'Diana Prince', driverName: null, pickupAddress: '414 Spruce Dr', dropoffPoints: [{ id: 'dp4-1', address: '515 Redwood Ct' }], status: 'Pending', date: '2023-10-25', deliveryCharge: 15.00 },
   { id: 'ORD005', customerName: 'Alice Johnson', driverName: 'Mike Ross', pickupAddress: '616 Aspen Way', dropoffPoints: [{ id: 'dp5-1', address: '717 Sequoia Blvd' }], status: 'Delivered', date: '2023-10-26', deliveryCharge: 15.00 },
   { id: 'ORD006', customerName: 'Fiona Glenanne', driverName: 'Jane Doe', pickupAddress: '818 Willow Creek', dropoffPoints: [{ id: 'dp6-1', address: '919 Cypress Hills' }, { id: 'dp6-2', address: '1010 Palm Rd' }, { id: 'dp6-3', address: '1111 Beach Blvd' }], status: 'In Transit', date: '2023-10-27', deliveryCharge: 25.00 },
   { id: 'ORD007', customerName: 'George Costanza', driverName: 'Harvey Specter', pickupAddress: '111 Main St', dropoffPoints: [{ id: 'dp7-1', address: '222 Side St' }], status: 'Delivered', date: '2023-10-28', deliveryCharge: 15.00 },
-  { id: 'ORD008', customerName: 'Harry Potter', driverName: 'John Smith', pickupAddress: '4 Privet Drive', dropoffPoints: [{ id: 'dp8-1', address: 'Hogwarts' }], status: 'Pending', date: todayStr, deliveryCharge: 15.00 },
+  { id: 'ORD008', customerName: 'Harry Potter', driverName: null, pickupAddress: '4 Privet Drive', dropoffPoints: [{ id: 'dp8-1', address: 'Hogwarts' }], status: 'Pending', date: todayStr, deliveryCharge: 15.00 },
   { id: 'ORD009', customerName: 'Alice Johnson', driverName: 'Jane Doe', pickupAddress: 'Barnett College', dropoffPoints: [{ id: 'dp9-1', address: 'Temple of Doom' }], status: 'In Transit', date: '2023-10-28', deliveryCharge: 15.00 },
   { id: 'ORD010', customerName: 'Bob Williams', driverName: 'Harvey Specter', pickupAddress: '333 Oak St', dropoffPoints: [{ id: 'dp10-1', address: '444 Pine St' }, { id: 'dp10-2', address: '555 Maple Ave' }], status: 'Delivered', date: todayStr, deliveryCharge: 20.00 },
 ];

@@ -1,3 +1,4 @@
+
 /**
  * @license
  * SPDX-License-Identifier: Apache-2.0
@@ -11,6 +12,7 @@ import { DashboardView } from './views/DashboardView';
 import { ProfileView } from './views/ProfileView';
 import { HistoryView } from './views/HistoryView';
 import { CreateOrderModal } from '../../components/modals/CreateOrderModal';
+import { OrderDetailsView } from './views/OrderDetailsView';
 
 interface CustomerDashboardProps {
     user: User;
@@ -31,6 +33,7 @@ const NAV_ITEMS = [
 export const CustomerDashboard = ({ user, allOrders, customers, onLogout, onAddOrder, onUpdateCustomers, onUpdateOrders }: CustomerDashboardProps) => {
     const [view, setView] = useState<CustomerView>('dashboard');
     const [isCreatingOrder, setIsCreatingOrder] = useState(false);
+    const [selectedHistoryOrderId, setSelectedHistoryOrderId] = useState<string | null>(null);
     
     const currentUserData = customers.find(c => c.name === user.name);
     
@@ -39,13 +42,25 @@ export const CustomerDashboard = ({ user, allOrders, customers, onLogout, onAddO
         onUpdateCustomers(updatedCustomers);
     };
 
+    const handleViewOrderDetails = (orderId: string) => {
+        setSelectedHistoryOrderId(orderId);
+    };
+
+    const handleBackToHistory = () => {
+        setSelectedHistoryOrderId(null);
+        setView('history');
+    };
+
     const getHeaderTitle = () => {
+        if (selectedHistoryOrderId) {
+            return `Order Details #${selectedHistoryOrderId}`;
+        }
         if (view === 'history') return 'Order History';
         return view.charAt(0).toUpperCase() + view.slice(1);
     };
 
     const renderHeaderActions = () => {
-        if (view === 'dashboard') {
+        if (view === 'dashboard' && !selectedHistoryOrderId) {
             return (
                 <button className="action-btn" onClick={() => setIsCreatingOrder(true)}>
                     <span className="material-symbols-outlined">add</span> New Delivery
@@ -56,11 +71,20 @@ export const CustomerDashboard = ({ user, allOrders, customers, onLogout, onAddO
     };
 
     const renderContent = () => {
+        if (selectedHistoryOrderId) {
+            return <OrderDetailsView
+                orderId={selectedHistoryOrderId}
+                orders={allOrders}
+                onBack={handleBackToHistory}
+                onUpdateOrders={onUpdateOrders}
+            />;
+        }
+
         switch (view) {
             case 'dashboard':
                 return <DashboardView user={user} allOrders={allOrders} onUpdateOrders={onUpdateOrders} />;
             case 'history':
-                return <HistoryView user={user} allOrders={allOrders} />;
+                return <HistoryView user={user} allOrders={allOrders} onViewDetails={handleViewOrderDetails} onUpdateOrders={onUpdateOrders} />;
             case 'profile':
                  if (!currentUserData) return <p>Loading profile...</p>;
                 return <ProfileView customer={currentUserData} allOrders={allOrders} onUpdateProfile={handleUpdateProfile} />;

@@ -4,7 +4,7 @@
  */
 
 export type AdminView = 'dashboard' | 'orders' | 'drivers' | 'customers' | 'financials';
-export type DriverView = 'dashboard' | 'earnings' | 'settings';
+export type DriverView = 'dashboard' | 'earnings' | 'history' | 'settings';
 export type CustomerView = 'dashboard' | 'profile' | 'history';
 export type OrderStatus = 'Pending' | 'In Transit' | 'Delivered' | 'Cancelled';
 export type DriverStatus = 'Online' | 'Offline' | 'On-delivery';
@@ -24,6 +24,7 @@ export interface Order {
   status: OrderStatus;
   date: string;
   deliveryCharge: number;
+  rating?: number;
 }
 
 export interface BankDetails {
