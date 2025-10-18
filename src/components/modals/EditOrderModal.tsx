@@ -2,7 +2,7 @@
  * @license
  * SPDX-License-Identifier: Apache-2.0
  */
-import * as React from 'react';
+import React, { useState, useEffect, FormEvent, ChangeEvent } from 'react';
 import { Order } from '../../data/types';
 
 interface EditOrderModalProps {
@@ -12,16 +12,16 @@ interface EditOrderModalProps {
 }
 
 export const EditOrderModal = ({ order, onSave, onClose }: EditOrderModalProps) => {
-    const [formData, setFormData] = React.useState<Order>(order);
+    const [formData, setFormData] = useState<Order>(order);
     const BASE_FEE = 10;
     const FEE_PER_DROP = 5;
 
-    React.useEffect(() => {
+    useEffect(() => {
         const charge = BASE_FEE + (formData.dropoffPoints.length * FEE_PER_DROP);
         setFormData(prev => ({ ...prev, deliveryCharge: charge }));
     }, [formData.dropoffPoints.length]);
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         setFormData(prev => ({ ...prev, [name]: value }));
     };
@@ -47,7 +47,7 @@ export const EditOrderModal = ({ order, onSave, onClose }: EditOrderModalProps) 
         }));
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = (e: FormEvent) => {
         e.preventDefault();
         onSave(formData);
     };

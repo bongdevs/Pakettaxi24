@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import * as React from 'react';
+import React, { useState, useMemo } from 'react';
 import { Driver, Order } from '../../data/types';
 import { StatusPill } from '../common/StatusPill';
 import { PointsBadgeWithTooltip } from '../common/PointsBadgeWithTooltip';
@@ -15,9 +15,9 @@ interface DriverDetailsModalProps {
 }
 
 export const DriverDetailsModal = ({ driver, onClose, orders }: DriverDetailsModalProps) => {
-    const [sortOrder, setSortOrder] = React.useState<'desc' | 'asc'>('desc');
+    const [sortOrder, setSortOrder] = useState<'desc' | 'asc'>('desc');
 
-    const driverOrders = React.useMemo(() => {
+    const driverOrders = useMemo(() => {
         const filteredOrders = orders.filter(o => o.driverName === driver.name);
         filteredOrders.sort((a, b) => {
             const dateA = new Date(a.date).getTime();

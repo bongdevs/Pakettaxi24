@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import * as React from 'react';
+import React, { useMemo } from 'react';
 import { Customer, Order } from '../../data/types';
 import { StatusPill } from '../common/StatusPill';
 
@@ -14,7 +14,7 @@ interface CustomerDetailsModalProps {
 }
 
 export const CustomerDetailsModal = ({ customer, onClose, orders }: CustomerDetailsModalProps) => {
-    const customerOrders = React.useMemo(() => {
+    const customerOrders = useMemo(() => {
         return orders.filter(o => o.customerName === customer.name)
             .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
     }, [orders, customer.name]);

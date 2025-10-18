@@ -2,7 +2,7 @@
  * @license
  * SPDX-License-Identifier: Apache-2.0
  */
-import * as React from 'react';
+import React, { useState, useEffect } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import { Driver } from '../../data/types';
 
@@ -19,9 +19,9 @@ interface LiveTrackingMapProps {
 
 export const LiveTrackingMap = ({ driverName, drivers }: LiveTrackingMapProps) => {
     const driver = drivers.find(d => d.name === driverName);
-    const [position, setPosition] = React.useState<[number, number] | null>(driver ? [driver.lat, driver.lng] : null);
+    const [position, setPosition] = useState<[number, number] | null>(driver ? [driver.lat, driver.lng] : null);
 
-    React.useEffect(() => {
+    useEffect(() => {
         if (!driver) return;
         const interval = setInterval(() => {
             setPosition(prevPos => {

@@ -2,7 +2,7 @@
  * @license
  * SPDX-License-Identifier: Apache-2.0
  */
-import * as React from 'react';
+import React, { useState } from 'react';
 import { Order, OrderStatus } from '../../../data/types';
 import { StatusPill } from '../../../components/common/StatusPill';
 import { PointsBadgeWithTooltip } from '../../../components/common/PointsBadgeWithTooltip';
@@ -15,8 +15,8 @@ interface OrdersViewProps {
 }
 
 export const OrdersView = ({ orders, onUpdateOrders, onViewOrder }: OrdersViewProps) => {
-    const [recentlyUpdatedId, setRecentlyUpdatedId] = React.useState<string | null>(null);
-    const [editingOrder, setEditingOrder] = React.useState<Order | null>(null);
+    const [recentlyUpdatedId, setRecentlyUpdatedId] = useState<string | null>(null);
+    const [editingOrder, setEditingOrder] = useState<Order | null>(null);
 
     const handleUpdateStatus = (orderId: string, newStatus: OrderStatus) => {
         const updatedOrders = orders.map(order =>

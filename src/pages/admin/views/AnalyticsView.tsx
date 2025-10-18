@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import * as React from 'react';
+import React, { useMemo } from 'react';
 import {
   LineChart, Line, PieChart, Pie, Cell, XAxis, YAxis,
   CartesianGrid, Tooltip, Legend, ResponsiveContainer
@@ -15,7 +15,7 @@ interface AnalyticsViewProps {
 }
 
 export const AnalyticsView = ({ orders }: AnalyticsViewProps) => {
-  const orderVolumeData = React.useMemo(() => {
+  const orderVolumeData = useMemo(() => {
     const counts = orders.reduce((acc, order) => {
       acc[order.date] = (acc[order.date] || 0) + 1;
       return acc;
@@ -26,7 +26,7 @@ export const AnalyticsView = ({ orders }: AnalyticsViewProps) => {
       .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
   }, [orders]);
 
-  const statusData = React.useMemo(() => {
+  const statusData = useMemo(() => {
     const counts = orders.reduce((acc, order) => {
       acc[order.status] = (acc[order.status] || 0) + 1;
       return acc;

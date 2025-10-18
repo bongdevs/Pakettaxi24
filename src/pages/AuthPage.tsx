@@ -3,46 +3,44 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import * as React from 'react';
+import React, { useState, FormEvent } from 'react';
 import { User, UserRole } from '../data/types';
 
 interface AuthPageProps {
     onLogin: (user: User) => void;
 }
 
+const dummyUsers: Record<string, { name: string; role: UserRole }> = {
+    'customer@example.com': { name: 'Alice Johnson', role: 'Customer' },
+    'driver@example.com': { name: 'John Smith', role: 'Driver' },
+    'admin@example.com': { name: 'Admin User', role: 'Admin' },
+};
+
 export const AuthPage = ({ onLogin }: AuthPageProps) => {
-    const [isLoginView, setIsLoginView] = React.useState(true);
-    const [name, setName] = React.useState('');
-    const [email, setEmail] = React.useState('');
-    const [password, setPassword] = React.useState('');
-    const [role, setRole] = React.useState<UserRole>('Customer');
+    const [isLoginView, setIsLoginView] = useState(true);
+    const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [role, setRole] = useState<UserRole>('Customer');
+    const [error, setError] = useState('');
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = (e: FormEvent) => {
         e.preventDefault();
-        
-        // Dummy user logic
-        if (isLoginView) {
-            if (email === 'customer@example.com' && password === 'password') {
-                onLogin({ name: 'Alice Johnson', email, role: 'Customer' });
-                return;
-            }
-            if (email === 'driver@example.com' && password === 'password') {
-                onLogin({ name: 'John Smith', email, role: 'Driver' });
-                return;
-            }
-             if (email === 'admin@example.com' && password === 'password') {
-                onLogin({ name: 'Admin User', email, role: 'Admin' });
-                return;
-            }
-        }
+        setError(''); // Clear previous errors
 
-        // Generic login/register for any other input
-        const user: User = {
-            name: isLoginView ? 'Admin User' : name,
-            email,
-            role: isLoginView ? 'Admin' : role
-        };
-        onLogin(user);
+        if (isLoginView) {
+            if (password === 'password' && dummyUsers[email]) {
+                onLogin({ ...dummyUsers[email], email });
+                return;
+            }
+            setError('Invalid email or password.');
+
+        } else { // Register view
+            const newUser: User = { name, email, role };
+            // In a real app, you'd check if the user exists, etc.
+            // For this mock app, we'll just log them in.
+            onLogin(newUser);
+        }
     };
 
     return (
@@ -54,6 +52,7 @@ export const AuthPage = ({ onLogin }: AuthPageProps) => {
                     <p>Enter your details to {isLoginView ? 'login' : 'register'}</p>
                 </div>
                 <form className="auth-form" onSubmit={handleSubmit}>
+                    {error && <div className="auth-error">{error}</div>}
                     {!isLoginView && (
                         <div className="form-group">
                             <label htmlFor="name">Full Name</label>
@@ -62,7 +61,7 @@ export const AuthPage = ({ onLogin }: AuthPageProps) => {
                     )}
                     <div className="form-group">
                         <label htmlFor="email">Email Address</label>
-                        <input type="email" id="email" value={email} onChange={e => setEmail(e.target.value)} required placeholder="admin@example.com" />
+                        <input type="email" id="email" value={email} onChange={e => setEmail(e.target.value)} required placeholder="customer@example.com" />
                     </div>
                     <div className="form-group">
                         <label htmlFor="password">Password</label>

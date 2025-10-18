@@ -2,7 +2,7 @@
  * @license
  * SPDX-License-Identifier: Apache-2.0
  */
-import * as React from 'react';
+import React, { useState } from 'react';
 import { Driver, Order } from '../../../data/types';
 import { StatusPill } from '../../../components/common/StatusPill';
 import { DriverDetailsModal } from '../../../components/modals/DriverDetailsModal';
@@ -13,7 +13,7 @@ interface DriversViewProps {
 }
 
 export const DriversView = ({ drivers, orders }: DriversViewProps) => {
-    const [selectedDriver, setSelectedDriver] = React.useState<Driver | null>(null);
+    const [selectedDriver, setSelectedDriver] = useState<Driver | null>(null);
 
     return (
         <>

@@ -49,7 +49,7 @@ body {
   width: 100%;
 }
 
-#app-container, .customer-dashboard-container, .driver-dashboard-container {
+#app-container, .driver-dashboard-container {
   display: flex;
   width: 100%;
   height: 100%;
@@ -158,6 +158,17 @@ body {
     font-weight: 600;
     cursor: pointer;
     margin-left: 0.25rem;
+}
+
+.auth-error {
+    background-color: #fee2e2;
+    color: #b91c1c;
+    border: 1px solid #fecaca;
+    padding: 0.75rem;
+    border-radius: var(--border-radius);
+    margin-bottom: 1.25rem;
+    text-align: center;
+    font-weight: 500;
 }
 
 
@@ -508,6 +519,9 @@ body {
     cursor: pointer;
     font-weight: 500;
     transition: background-color 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
 }
 
 .action-btn:hover {
@@ -517,6 +531,8 @@ body {
 .action-btn.btn-success { background-color: var(--success-color); }
 .action-btn.btn-success:hover { background-color: var(--success-color-hover); }
 
+.action-btn.btn-danger { background-color: var(--danger-color); }
+.action-btn.btn-danger:hover { background-color: var(--danger-color-hover); }
 
 .actions-cell {
     display: flex;
@@ -892,55 +908,11 @@ body {
 }
 
 /* Customer Dashboard */
-.customer-dashboard-container {
-    flex-direction: column;
-}
-
-.customer-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1rem 2rem;
-    background-color: #fff;
-    border-bottom: 1px solid var(--border-color);
-    width: 100%;
-}
-.customer-header .sidebar-header {
-    margin-bottom: 0;
-}
-.logout-btn-customer {
-    background: none;
-    border: 1px solid var(--border-color);
-    color: var(--text-secondary);
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.2s ease;
-}
-.logout-btn-customer:hover {
-    background-color: var(--danger-color);
-    color: white;
-    border-color: var(--danger-color);
-}
-
-.customer-content-area {
-    padding: 2rem;
-    flex-grow: 1;
-    overflow-y: auto;
-}
-
 .customer-main-grid {
     display: grid;
     grid-template-columns: 300px 1fr;
-    grid-template-rows: auto 1fr;
     gap: 1.5rem;
-    grid-template-areas:
-        "active tracking"
-        "history history";
+    grid-template-areas: "active tracking";
 }
 .active-orders-list { grid-area: active; }
 .delivery-tracking { grid-area: tracking; }
@@ -998,6 +970,22 @@ body {
 .pending-delivery h4 {
     font-size: 1.25rem;
     margin-top: 1rem;
+    font-weight: 600;
+}
+
+.tracking-panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 1.5rem;
+}
+
+.tracking-panel-header h3 {
+    margin: 0;
+    padding: 0;
+    border: none;
+    font-size: 1.25rem;
     font-weight: 600;
 }
 
@@ -1148,6 +1136,102 @@ body {
     max-width: 500px;
 }
 
+/* Create Order Modal Stepper and Success Message */
+.create-order-steps {
+    display: flex;
+    justify-content: space-around;
+    padding: 1rem 2rem;
+    background-color: var(--background-light);
+    border-bottom: 1px solid var(--border-color);
+}
+.step {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+.step span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background-color: var(--border-color);
+    color: var(--text-secondary);
+    font-weight: 700;
+    transition: all 0.3s ease;
+}
+.step.active {
+    color: var(--primary-color);
+}
+.step.active span {
+    background-color: var(--primary-color);
+    color: white;
+}
+.success-message {
+    text-align: center;
+    padding: 2rem;
+}
+.success-message .material-symbols-outlined {
+    font-size: 4rem;
+    color: var(--success-color);
+}
+.success-message h3 {
+    font-size: 1.5rem;
+    margin: 1rem 0 0.5rem;
+}
+.success-message p {
+    color: var(--text-secondary);
+}
+
+/* Customer Profile View */
+.profile-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+}
+
+.address-list ul {
+    list-style: none;
+}
+
+.address-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    margin-bottom: 0.75rem;
+}
+
+.address-item-info {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.address-item-info .material-symbols-outlined {
+    color: var(--primary-color);
+    font-size: 2rem;
+}
+
+.address-item-info div strong {
+    display: block;
+    font-weight: 600;
+}
+
+.address-item-info div span {
+    color: var(--text-secondary);
+}
+
+.address-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
 
 @media (max-width: 1024px) {
     .analytics-view {
@@ -1160,8 +1244,10 @@ body {
         grid-template-columns: 1fr;
         grid-template-areas:
             "active"
-            "tracking"
-            "history";
+            "tracking";
+    }
+    .profile-grid {
+        grid-template-columns: 1fr;
     }
 }
 
@@ -1198,10 +1284,10 @@ body {
         padding: 0;
         margin: 0;
     }
-    .header, .customer-header {
+    .header {
         padding: 1rem;
     }
-    .content-area, .customer-content-area {
+    .content-area {
         padding: 1rem;
     }
     .search-bar input {

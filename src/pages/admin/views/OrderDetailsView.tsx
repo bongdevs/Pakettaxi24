@@ -2,7 +2,7 @@
  * @license
  * SPDX-License-Identifier: Apache-2.0
  */
-import * as React from 'react';
+import React from 'react';
 import { Order, Driver, Customer } from '../../../data/types';
 import { StatusPill } from '../../../components/common/StatusPill';
 import { LiveTrackingMap } from '../../../components/common/LiveTrackingMap';
@@ -48,7 +48,7 @@ export const OrderDetailsView = ({ orderId, orders, drivers, customers, onBack }
                      <h3>Locations</h3>
                      <p><strong>Pickup:</strong> {order.pickupAddress}</p>
                      <p><strong>Dropoffs:</strong></p>
-                     <ul>{order.dropoffPoints.map(p => <li key={p.id}>{p.address}</li>)}</ul>
+                     <ul>{Array.isArray(order.dropoffPoints) && order.dropoffPoints.map(p => <li key={p.id}>{p.address}</li>)}</ul>
                 </div>
                  {order.status === 'In Transit' && order.driverName && (
                     <div className="card card-full-width">

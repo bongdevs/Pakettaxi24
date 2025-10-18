@@ -2,7 +2,7 @@
  * @license
  * SPDX-License-Identifier: Apache-2.0
  */
-import * as React from 'react';
+import React, { useState, useMemo, FormEvent, ChangeEvent } from 'react';
 import { User, Order, Driver, DriverView, BankDetails, OrderStatus } from '../../data/types';
 import { Sidebar } from '../../components/common/Sidebar';
 import { Header } from '../../components/common/Header';
@@ -13,10 +13,10 @@ import { StatusPill } from '../../components/common/StatusPill';
 // --- Sub-components for Driver Views ---
 
 const DriverDashboardView = ({ orders, onUpdateStatus }: { orders: Order[]; onUpdateStatus: (orderId: string, status: OrderStatus) => void; }) => {
-    const activeDeliveries = React.useMemo(() => orders.filter(o => o.status === 'In Transit' || o.status === 'Pending'), [orders]);
-    const deliveryHistory = React.useMemo(() => orders.filter(o => o.status === 'Delivered' || o.status === 'Cancelled'), [orders]);
+    const activeDeliveries = useMemo(() => orders.filter(o => o.status === 'In Transit' || o.status === 'Pending'), [orders]);
+    const deliveryHistory = useMemo(() => orders.filter(o => o.status === 'Delivered' || o.status === 'Cancelled'), [orders]);
 
-    const kpis = React.useMemo(() => {
+    const kpis = useMemo(() => {
         const todaysDeliveries = orders.filter(o => o.date === todayStr && o.status === 'Delivered');
         const earnings = todaysDeliveries.reduce((sum, order) => sum + order.deliveryCharge, 0);
         return { earnings: earnings.toFixed(2), completedToday: todaysDeliveries.length, activeCount: activeDeliveries.length };
@@ -66,12 +66,12 @@ const EarningsView = ({ driver, onPayoutRequest }: { driver: Driver; onPayoutReq
 );
 
 const SettingsView = ({ driver, onSave }: { driver: Driver; onSave: (details: BankDetails) => void }) => {
-    const [details, setDetails] = React.useState<BankDetails>(driver.bankDetails || { accountHolder: '', bankName: '', accountNumber: '' });
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const [details, setDetails] = useState<BankDetails>(driver.bankDetails || { accountHolder: '', bankName: '', accountNumber: '' });
+    const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         setDetails(prev => ({...prev, [name]: value}));
     };
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = (e: FormEvent) => {
         e.preventDefault(); onSave(details); alert('Bank details saved!');
     };
     return (
@@ -103,10 +103,10 @@ interface DriverDashboardProps {
 }
 
 export const DriverDashboard = ({ user, allOrders, onLogout, onUpdateOrders }: DriverDashboardProps) => {
-    const [driverView, setDriverView] = React.useState<DriverView>('dashboard');
-    const [driverData, setDriverData] = React.useState<Driver | null>(() => mockDrivers.find(d => d.name === user.name) || null);
+    const [driverView, setDriverView] = useState<DriverView>('dashboard');
+    const [driverData, setDriverData] = useState<Driver | null>(() => mockDrivers.find(d => d.name === user.name) || null);
 
-    const driverOrders = React.useMemo(() => allOrders.filter(o => o.driverName === user.name), [allOrders, user.name]);
+    const driverOrders = useMemo(() => allOrders.filter(o => o.driverName === user.name), [allOrders, user.name]);
 
     const handleUpdateStatus = (orderId: string, newStatus: OrderStatus) => {
         const updatedOrders = allOrders.map(order =>

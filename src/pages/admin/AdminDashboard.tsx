@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import * as React from 'react';
+import React, { useState } from 'react';
 import { User, Order, Driver, Customer, AdminView } from '../../data/types';
 import { Sidebar } from '../../components/common/Sidebar';
 import { Header } from '../../components/common/Header';
@@ -11,7 +11,6 @@ import { DashboardView } from './views/DashboardView';
 import { OrdersView } from './views/OrdersView';
 import { DriversView } from './views/DriversView';
 import { CustomersView } from './views/CustomersView';
-import { AnalyticsView } from './views/AnalyticsView';
 import { FinancialsView } from './views/FinancialsView';
 import { OrderDetailsView } from './views/OrderDetailsView';
 
@@ -29,13 +28,12 @@ const NAV_ITEMS = [
     { id: 'orders', icon: 'inventory_2', label: 'Orders' },
     { id: 'drivers', icon: 'local_shipping', label: 'Drivers' },
     { id: 'customers', icon: 'group', label: 'Customers' },
-    { id: 'analytics', icon: 'monitoring', label: 'Analytics' },
     { id: 'financials', icon: 'account_balance_wallet', label: 'Financials' },
 ];
 
 export const AdminDashboard = ({ user, orders, drivers, customers, onLogout, onUpdateOrders }: AdminDashboardProps) => {
-    const [view, setView] = React.useState<AdminView>('dashboard');
-    const [selectedOrderId, setSelectedOrderId] = React.useState<string | null>(null);
+    const [view, setView] = useState<AdminView>('dashboard');
+    const [selectedOrderId, setSelectedOrderId] = useState<string | null>(null);
 
     const handleViewOrder = (orderId: string) => {
         setSelectedOrderId(orderId);
@@ -71,7 +69,6 @@ export const AdminDashboard = ({ user, orders, drivers, customers, onLogout, onU
             case 'dashboard': return <DashboardView orders={orders} drivers={drivers} />;
             case 'orders': return <OrdersView orders={orders} onUpdateOrders={onUpdateOrders} onViewOrder={handleViewOrder} />;
             case 'drivers': return <DriversView drivers={drivers} orders={orders} />;
-            case 'analytics': return <AnalyticsView orders={orders} />;
             case 'customers': return <CustomersView customers={customers} orders={orders} />;
             case 'financials': return <FinancialsView orders={orders} />;
             default: return <DashboardView orders={orders} drivers={drivers} />;

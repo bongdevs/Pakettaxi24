@@ -2,7 +2,7 @@
  * @license
  * SPDX-License-Identifier: Apache-2.0
  */
-import * as React from 'react';
+import React, { useMemo } from 'react';
 import { Order, Driver } from '../../../data/types';
 import { KPICard } from '../../../components/common/KPICard';
 import { COMMISSION_RATE } from '../../../data/mockData';
@@ -13,11 +13,11 @@ interface DashboardViewProps {
 }
 
 export const DashboardView = ({ orders, drivers }: DashboardViewProps) => {
-    const totalRevenue = React.useMemo(() => orders.reduce((sum, order) => {
+    const totalRevenue = useMemo(() => orders.reduce((sum, order) => {
         return order.status === 'Delivered' ? sum + order.deliveryCharge : sum;
     }, 0).toFixed(2), [orders]);
 
-    const totalCommissions = React.useMemo(() => (parseFloat(totalRevenue) * COMMISSION_RATE).toFixed(2), [totalRevenue]);
+    const totalCommissions = useMemo(() => (parseFloat(totalRevenue) * COMMISSION_RATE).toFixed(2), [totalRevenue]);
     
     return (
         <div className="dashboard-view">

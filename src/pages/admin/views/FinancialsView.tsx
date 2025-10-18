@@ -2,7 +2,7 @@
  * @license
  * SPDX-License-Identifier: Apache-2.0
  */
-import * as React from 'react';
+import React, { useMemo } from 'react';
 import { Order } from '../../../data/types';
 import { KPICard } from '../../../components/common/KPICard';
 import { COMMISSION_RATE, todayStr } from '../../../data/mockData';
@@ -12,9 +12,9 @@ interface FinancialsViewProps {
 }
 
 export const FinancialsView = ({ orders }: FinancialsViewProps) => {
-    const deliveredOrders = React.useMemo(() => orders.filter(o => o.status === 'Delivered'), [orders]);
+    const deliveredOrders = useMemo(() => orders.filter(o => o.status === 'Delivered'), [orders]);
 
-    const financialData = React.useMemo(() => {
+    const financialData = useMemo(() => {
         const todayUTC = new Date();
         todayUTC.setUTCHours(0, 0, 0, 0);
 

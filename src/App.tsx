@@ -3,22 +3,22 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import * as React from 'react';
+import React, { useState, useEffect } from 'react';
 import { AuthPage } from './pages/AuthPage';
 import { AdminDashboard } from './pages/admin/AdminDashboard';
 import { CustomerDashboard } from './pages/customer/CustomerDashboard';
 import { DriverDashboard } from './pages/driver/DriverDashboard';
-import { User, Order } from './data/types';
+import { User, Order, Customer } from './data/types';
 import { mockOrders, mockDrivers, generateCustomers } from './data/mockData';
 
 export const App = () => {
-    const [currentUser, setCurrentUser] = React.useState<User | null>(null);
+    const [currentUser, setCurrentUser] = useState<User | null>(null);
     // Centralized state for orders, drivers, and customers
-    const [orders, setOrders] = React.useState<Order[]>(mockOrders);
-    const [drivers, setDrivers] = React.useState(mockDrivers);
-    const [customers, setCustomers] = React.useState(() => generateCustomers(mockOrders));
+    const [orders, setOrders] = useState<Order[]>(mockOrders);
+    const [drivers, setDrivers] = useState(mockDrivers);
+    const [customers, setCustomers] = useState(() => generateCustomers(mockOrders));
 
-    React.useEffect(() => {
+    useEffect(() => {
         // Re-generate customers if orders change
         setCustomers(generateCustomers(orders));
     }, [orders]);
@@ -39,6 +39,10 @@ export const App = () => {
         setOrders(updatedOrders);
     };
 
+    const handleUpdateCustomers = (updatedCustomers: Customer[]) => {
+        setCustomers(updatedCustomers);
+    }
+
     if (!currentUser) {
         return <AuthPage onLogin={handleLogin} />;
     }
@@ -57,8 +61,11 @@ export const App = () => {
             return <CustomerDashboard 
                 user={currentUser} 
                 allOrders={orders} 
+                customers={customers}
                 onLogout={handleLogout} 
                 onAddOrder={handleAddOrder}
+                onUpdateCustomers={handleUpdateCustomers}
+                onUpdateOrders={handleUpdateOrders}
             />;
         case 'Driver':
             return <DriverDashboard 

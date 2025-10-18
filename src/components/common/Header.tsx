@@ -3,19 +3,21 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import * as React from 'react';
+import React from 'react';
 import { User } from '../../data/types';
 
 interface HeaderProps {
     title: string;
     user: User;
+    actions?: React.ReactNode;
 }
 
-export const Header = ({ title, user }: HeaderProps) => {
+export const Header = ({ title, user, actions }: HeaderProps) => {
     return (
         <header className="header">
             <h2>{title}</h2>
             <div className="header-actions">
+                {actions}
                 <div className="search-bar">
                     <span className="material-symbols-outlined">search</span>
                     <input type="text" placeholder="Search..." />

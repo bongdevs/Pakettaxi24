@@ -53,5 +53,10 @@ export const generateCustomers = (orders: Order[]): Customer[] => {
             name,
             email: `${name.toLowerCase().replace(/\s+/g, '.')}@example.com`,
             orderCount: customerOrderCounts[name],
+            phone: `+1-202-555-01${Math.floor(10 + Math.random() * 90)}`,
+            savedAddresses: name === 'Alice Johnson' ? [
+                { id: 'addr1', name: 'Home', address: '123 Oak St' },
+                { id: 'addr2', name: 'Work', address: '789 Business Rd' }
+            ] : [],
         }));
 };

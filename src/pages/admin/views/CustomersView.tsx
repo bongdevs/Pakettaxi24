@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import * as React from 'react';
+import React, { useState } from 'react';
 import { Customer, Order } from '../../../data/types';
 import { CustomerDetailsModal } from '../../../components/modals/CustomerDetailsModal';
 
@@ -13,7 +13,7 @@ interface CustomersViewProps {
 }
 
 export const CustomersView = ({ customers, orders }: CustomersViewProps) => {
-    const [selectedCustomer, setSelectedCustomer] = React.useState<Customer | null>(null);
+    const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(null);
 
     return (
         <>

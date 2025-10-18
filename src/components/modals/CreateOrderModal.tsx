@@ -2,7 +2,7 @@
  * @license
  * SPDX-License-Identifier: Apache-2.0
  */
-import * as React from 'react';
+import React, { useState, useEffect, FormEvent } from 'react';
 import { Order, DropoffPoint } from '../../data/types';
 
 interface CreateOrderModalProps {
@@ -12,15 +12,15 @@ interface CreateOrderModalProps {
 }
 
 export const CreateOrderModal = ({ onClose, onSave, customerName }: CreateOrderModalProps) => {
-    const [step, setStep] = React.useState(1);
-    const [pickup, setPickup] = React.useState('');
-    const [dropoffs, setDropoffs] = React.useState<DropoffPoint[]>([{ id: `new-${Date.now()}`, address: '' }]);
-    const [deliveryCharge, setDeliveryCharge] = React.useState(0);
+    const [step, setStep] = useState(1);
+    const [pickup, setPickup] = useState('');
+    const [dropoffs, setDropoffs] = useState<DropoffPoint[]>([{ id: `new-${Date.now()}`, address: '' }]);
+    const [deliveryCharge, setDeliveryCharge] = useState(0);
 
     const BASE_FEE = 10;
     const FEE_PER_DROP = 5;
 
-    React.useEffect(() => {
+    useEffect(() => {
         const charge = BASE_FEE + (dropoffs.length * FEE_PER_DROP);
         setDeliveryCharge(charge);
     }, [dropoffs.length]);
@@ -37,7 +37,7 @@ export const CreateOrderModal = ({ onClose, onSave, customerName }: CreateOrderM
         setDropoffs(prev => prev.filter(dp => dp.id !== id));
     };
 
-    const goToNextStep = (e: React.FormEvent) => {
+    const goToNextStep = (e: FormEvent) => {
         e.preventDefault();
         setStep(2);
     };

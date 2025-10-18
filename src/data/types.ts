@@ -3,8 +3,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-export type AdminView = 'dashboard' | 'orders' | 'drivers' | 'customers' | 'analytics' | 'financials';
+export type AdminView = 'dashboard' | 'orders' | 'drivers' | 'customers' | 'financials';
 export type DriverView = 'dashboard' | 'earnings' | 'settings';
+export type CustomerView = 'dashboard' | 'profile' | 'history';
 export type OrderStatus = 'Pending' | 'In Transit' | 'Delivered' | 'Cancelled';
 export type DriverStatus = 'Online' | 'Offline' | 'On-delivery';
 export type UserRole = 'Admin' | 'Driver' | 'Customer';
@@ -54,11 +55,19 @@ export interface Payout {
     status: 'Completed' | 'Processing';
 }
 
+export interface SavedAddress {
+    id: string;
+    name: string; // e.g., 'Home', 'Work'
+    address: string;
+}
+
 export interface Customer {
   id: string;
   name: string;
   email: string;
   orderCount: number;
+  phone?: string;
+  savedAddresses?: SavedAddress[];
 }
 
 export interface User {
